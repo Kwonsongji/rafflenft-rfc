@@ -3,7 +3,9 @@
 // 3) npx hardhat node pour les chaînes de test, on laisse tourner et then 
 // on lance un nouv' terminal pour lancer une cmd qui permettra de déployer le sc:
 //npx hardhat run scripts/deploy.js --network localhost et on obtient
-// l'add sur laquelle le sc a été déployé
+// l'addresse sur laquelle le sc a été déployé
+// go partie Front faire tout les imports, than add Hooks pour 
+// obtenir les addr' des comptes co' à métamaks, le prix 
 
 
 
