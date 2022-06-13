@@ -49,6 +49,37 @@ function App() {
     requestAccount();
     getPrice();
   }, [])
+  
+  async function mint() {
+    if (typeof window.ethereum !== 'undefined') {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // on aura besoins d'un signer pour changer les données dans la blokchain
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(address, Contract.abi, signer);
+      // dans la function mint du contrat,pour minter on a besoins d'une preuve de Merkle
+
+      // on veut récupérer les addr' auth' à minter alors on les stock' dans un Array
+      let tab = [];
+      tokens.map(token =>
+        tab.push(token.address))  
+    }
+    // puis on vas hasher ces addr'
+    const leaves = tab.map(address => keccak256(address));
+    // à partir de cela je peux créer un arbre de Merkle
+    const tree = new MerkleTree(leaves, keccak256, { sort: true });
+    // j'aurais besoins d'une leaf qui est égal au compte actuellement connecté qui veut minter
+    const leaf = keccak256(accounts[0]);
+    // on a besoins de la leaf pour obtenir cette preuve de Merkle
+    const proof = tree.getHexProof(leaf);
+    // grace à le preuve de merkle on peut appeler la fonction mintNFT dans le sc
+    try {
+        //  on vas faire une transaction, et on va lancer la fonct' mintNFT dans le contrat 
+      const transaction = await contract.mintNFT(accounts[0], proof,)
+      // on peut ajouter des chose supp' dans une variable overrides que l'on vas créer 
+    catch (err) {
+      console.log(err);
+    }
+  }
 
 
   return (
