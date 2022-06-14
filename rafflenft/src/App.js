@@ -6,13 +6,13 @@ import { ethers } from 'ethers';
 import Contract from './artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.dbg.json';
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
-const keccak256 = require('keccack256');
+const keccak256 = require('keccak256');
 //on aura besoins ! du fichier json qu'on vas mtn créer dans src/
 const tokens = require('./tokens');
 // on aura besoins également de l'adresse du contrat intelligent 
 const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-import './App.css';
+import'./App.css';
 
 function App() {
   // on a besoins de se connecter au compte métamask à notre site 
@@ -38,7 +38,7 @@ function App() {
         // on récupère le prix et on le stocke dans une const 
         const dataPrice = await contract.getPrice(); //getPrice() => on appelle une fonctionalité du sc 
         // une fois récupérer on le met dans state Price 
-       setPrice(dataPrice);
+        setPrice(dataPrice);
       }
       catch (err) {
         console.log(err);
@@ -62,7 +62,7 @@ function App() {
       let tab = [];
       tokens.map(token =>
         tab.push(token.address))  
-    }
+  
     // puis on vas hasher ces addr'
     const leaves = tab.map(address => keccak256(address));
     // à partir de cela je peux créer un arbre de Merkle
@@ -73,13 +73,23 @@ function App() {
     const proof = tree.getHexProof(leaf);
     // grace à le preuve de merkle on peut appeler la fonction mintNFT dans le sc
     try {
-        //  on vas faire une transaction, et on va lancer la fonct' mintNFT dans le contrat 
-      const transaction = await contract.mintNFT(accounts[0], proof,)
+      let overrides = {
+        from: accounts[0], // on transmet l'info qui veut minter et le prix du nft 
+        value: price
+      }
+      //  on vas faire une transaction, et on va lancer la fonct' mintNFT dans le contrat 
+      const transaction = await contract.mintNFT(accounts[0], proof, overrides);
       // on peut ajouter des chose supp' dans une variable overrides que l'on vas créer 
+      await transaction.wait();
+      // on va créer au dessus de la var' transaction une variable overriable
+      // afin de lui transmettre différente information à cette fonction mintNFT
+    }
     catch (err) {
       console.log(err);
     }
+    }
   }
+  // 2° on revient au nav' on se checke si le compte est bien connecté à métamask
 
 
   return (
