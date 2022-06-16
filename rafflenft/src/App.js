@@ -12,7 +12,7 @@ const tokens = require('./tokens');
 // on aura besoins également de l'adresse du contrat intelligent 
 const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-import'./App.css';
+/* import './App.css'; */
 
 function App() {
   // on a besoins de se connecter au compte métamask à notre site 
@@ -90,6 +90,7 @@ function App() {
     }
   }
   // 2° on revient au nav' on se checke si le compte est bien connecté à métamask
+  // then on se co' sur la chaîne localhost
 
 
   return (
