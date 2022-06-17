@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // la librairie ethers et le fichier ERC721Merkle.dbg.json sont indispensables pour 
 // communiquer avec le contrat intellingent
 import { ethers } from 'ethers';
-import Contract from './artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.dbg.json';
+import Contract from './artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
@@ -96,9 +96,6 @@ function App() {
   return (
     <div className="App">
       <button onClick={mint}> MINT ON NFT</button>
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" /> 
-      </header> */}
 
     </div>
   );
