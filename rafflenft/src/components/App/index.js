@@ -3,27 +3,38 @@ import { useState, useEffect } from 'react';
 // la librairie ethers et le fichier ERC721Merkle.dbg.json sont indispensables pour 
 // communiquer avec le contrat intellingent
 import { ethers } from 'ethers';
-import Contract from './artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
+import Contract from '../../artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
 //on aura besoins ! du fichier json qu'on vas mtn créer dans src/
-const tokens = require('./tokens');
+const tokens = require('../../tokens.json');
 // on aura besoins également de l'adresse du contrat intelligent 
 const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
-/* import './App.css'; */
+
 
 function App() {
   // on a besoins de se connecter au compte métamask à notre site 
+  // on va récupérer toutes les add' et on va le stocker dans un Array
   const [accounts, setAccounts] = useState([]);
   const [price, setPrice] = useState();
-
-  // pour se co' à notre co' au compte métamask à notre site 
+  // on ne veut pas afficher les infos' tant que les datas n'ont pas été chargé
+  // et également tant que le user n'a pas été connecté à métamask
+  const [loader, setLoader] = useState(true);
+//le nbr d'ether que l'user à sur son compte :
+  const [balance, setBalance] = useState();
+// si l'user est bien inscrit sur la whitelist
+  const [success, setSuccess] = useState('');
+// si il est déjà inscrit sur la whitelist/ whitelist est complète/ un certain montant en ethereu
+  const [error, setError] = useState('');
+    // pour se co' à notre co' au compte métamask à notre site 
+  
   async function requestAccount() {
     if (typeof window.ethereum !== 'undefined') {
       // on récupère les comptes co' et on les mets dans la var accounts
       let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setLoader(false);
       // on le met dans le state setAccounts
       setAccounts(accounts);
     }
@@ -49,7 +60,25 @@ function App() {
     requestAccount();
     getPrice();
   }, [])
+  // Ajout d'EVENTS
+
+  window.ethereum.addListener('connect', async (reponse) => {
+    requestAccount();
+    console.log('ok');
+  })
+  // si il change de compte, on recharge la page
+  window.ethereum.on('accountsChanged', () => {
+    window.location.reload();
+  })
+  // si il change de network(réseau) ( il passe de ropsten/ il change de chaîne princ')
+  window.ethereum.on('chainChanged', () => {
+    window.location.reload();
+  })
   
+  window.ethereum.on('disconnect', () => {
+    window.location.reload();
+  })
+
   async function mint() {
     if (typeof window.ethereum !== 'undefined') {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -95,6 +124,12 @@ function App() {
 
   return (
     <div className="App">
+      {!loader &&
+        accounts.length > 0 ?
+        <p> You are connected with this account : {accounts[0]} </p>
+        :
+        <p> You are not connected with Metamask to this website.</p>
+      }
       <button onClick={mint}> MINT ON NFT</button>
 
     </div>
