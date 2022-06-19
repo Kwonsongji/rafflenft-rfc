@@ -1,8 +1,10 @@
+import './style.css';
+import InfosAccount from '../InfosAccount';
 /* import logo from './logo.svg'; */
 import { useState, useEffect } from 'react';
 // la librairie ethers et le fichier ERC721Merkle.dbg.json sont indispensables pour 
 // communiquer avec le contrat intellingent
-import { ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import Contract from '../../artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
@@ -12,6 +14,7 @@ const tokens = require('../../tokens.json');
 // on aura besoins également de l'adresse du contrat intelligent 
 const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
+/*-----------------COMPONENTS-----------------*/
 
 
 function App() {
@@ -21,7 +24,7 @@ function App() {
   const [price, setPrice] = useState();
   // on ne veut pas afficher les infos' tant que les datas n'ont pas été chargé
   // et également tant que le user n'a pas été connecté à métamask
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState('');
 //le nbr d'ether que l'user à sur son compte :
   const [balance, setBalance] = useState();
 // si l'user est bien inscrit sur la whitelist
@@ -34,10 +37,25 @@ function App() {
     if (typeof window.ethereum !== 'undefined') {
       // on récupère les comptes co' et on les mets dans la var accounts
       let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setLoader(false);
+   /*    setLoader(false); */
       // on le met dans le state setAccounts
       setAccounts(accounts);
-    }
+      // on veut récupérer la balance du compte connecté à notre site web
+      // pour cela on aura besoins d'un provider
+      // grâce au provider, on a accès au donnés du compte
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // grâce à ça on va pouvoir récupérer la balance
+      const balance = await provider.getBalance(accounts[0]);
+   /*     console.log('balance', balance)   */
+      // ensuite on refresh la p du navigateur et on obtient 
+      //BigNumber /isBigNumber : true sur firefox parce qu'elle est en WEI;
+      // 1 ETH : 10puissance10wei
+      // mais avec la librairie ethers, on a la possibilité de récupérer la balance etereum
+      // grâce à une fonctionalité
+       const balanceInEth = ethers.utils.formatEther(balance)
+   /*     console.log('balanceInEth', balanceInEth);  */
+       setBalance(balanceInEth);  
+     }
   }
   async function getPrice() {
     if (typeof window.ethereum !== 'undefined'){
@@ -123,13 +141,12 @@ function App() {
 
 
   return (
-    <div className="App">
-      {!loader &&
-        accounts.length > 0 ?
-        <p> You are connected with this account : {accounts[0]} </p>
-        :
-        <p> You are not connected with Metamask to this website.</p>
-      }
+    <div className="app">
+      <InfosAccount
+        accounts={accounts}
+        balance={balance}
+        loader={loader}
+      />
       <button onClick={mint}> MINT ON NFT</button>
 
     </div>
