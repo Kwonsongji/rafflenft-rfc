@@ -12,12 +12,14 @@
     "chai": "^4.3.6",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.8",
+    "firebase": "^8.10.0",
     "hardhat": "^2.9.9",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.2.31",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "4.0.3",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -47,10 +49,8 @@
   "devDependencies": {
     "react-error-overlay": "^6.0.9"
   },
-  
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
   }
-
 }

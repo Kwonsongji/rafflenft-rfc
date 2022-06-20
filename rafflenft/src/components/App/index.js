@@ -2,6 +2,7 @@ import './style.css';
 import InfosAccount from '../InfosAccount';
 /* import logo from './logo.svg'; */
 import { useState, useEffect } from 'react';
+import Firebase from '../Firebase';
 // la librairie ethers et le fichier ERC721Merkle.dbg.json sont indispensables pour 
 // communiquer avec le contrat intellingent
 import { ethers, providers } from 'ethers';
@@ -16,28 +17,40 @@ const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 /*-----------------COMPONENTS-----------------*/
 
+const ref = Firebase.firestore().collection('NFTwhitelist');
 
 function App() {
+  const [countData, setCountData] = useState(0);
+// Get number of users in the whitelist
   // on a besoins de se connecter au compte métamask à notre site 
   // on va récupérer toutes les add' et on va le stocker dans un Array
   const [accounts, setAccounts] = useState([]);
   const [price, setPrice] = useState();
   // on ne veut pas afficher les infos' tant que les datas n'ont pas été chargé
   // et également tant que le user n'a pas été connecté à métamask
-  const [loader, setLoader] = useState('');
+  const [loader, setLoader] = useState(true);
 //le nbr d'ether que l'user à sur son compte :
   const [balance, setBalance] = useState();
 // si l'user est bien inscrit sur la whitelist
   const [success, setSuccess] = useState('');
 // si il est déjà inscrit sur la whitelist/ whitelist est complète/ un certain montant en ethereu
-  const [error, setError] = useState('');
-    // pour se co' à notre co' au compte métamask à notre site 
-  
+  const [error, setError] = useState(''); 
+//pour savoir le nbre de pers' incrit dans la whitelist
+
+  //cf doc' firebase
+  function getCount() {
+    // on récupère la BDD et on fait un traitement
+    ref.get().then(function (querySnapShot) {
+      // assigner le nbre de pers' au state countData
+      setCountData(querySnapShot.size)
+    })
+  }
+// pour se co' à notre co' au compte métamask à notre site 
   async function requestAccount() {
     if (typeof window.ethereum !== 'undefined') {
       // on récupère les comptes co' et on les mets dans la var accounts
       let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-   /*    setLoader(false); */
+      setLoader(false); 
       // on le met dans le state setAccounts
       setAccounts(accounts);
       // on veut récupérer la balance du compte connecté à notre site web
@@ -76,7 +89,10 @@ function App() {
   }
   useEffect(() => {
     requestAccount();
+    setLoader(false);
     getPrice();
+    getCount();
+
   }, [])
   // Ajout d'EVENTS
 
@@ -153,4 +169,5 @@ function App() {
   );
 }
 
+export {ref}
 export default App;
