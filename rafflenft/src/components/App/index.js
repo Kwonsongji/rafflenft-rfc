@@ -1,5 +1,6 @@
 import './style.css';
 import InfosAccount from '../InfosAccount';
+import AddWhiteList from '../AddWhiteList';
 /* import logo from './logo.svg'; */
 import { useState, useEffect } from 'react';
 import Firebase from '../Firebase';
@@ -7,6 +8,7 @@ import Firebase from '../Firebase';
 // communiquer avec le contrat intellingent
 import { ethers, providers } from 'ethers';
 import Contract from '../../artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
+
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
@@ -20,6 +22,7 @@ const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const ref = Firebase.firestore().collection('NFTwhitelist');
 
 function App() {
+  //nbre de pers' sur la liste
   const [countData, setCountData] = useState(0);
 // Get number of users in the whitelist
   // on a besoins de se connecter au compte métamask à notre site 
@@ -158,6 +161,19 @@ function App() {
 
   return (
     <div className="app">
+      <AddWhiteList
+        countData={countData}
+        setcountData={setCountData}
+        getCount={getCount}
+        balance={balance}
+        setBalance={setBalance}
+        getBalance={getBalance}
+        setError={setError}
+        setSucess={setSucess}
+
+
+
+      />
       <InfosAccount
         accounts={accounts}
         balance={balance}
