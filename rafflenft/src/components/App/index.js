@@ -162,6 +162,7 @@ function App() {
   return (
     <div className="app">
       {error && <p className="alert error" {error}></p>}
+       {success && <p className="alert success" {success}></p>}
       <AddWhiteList
         countData={countData}
         setcountData={setCountData}
