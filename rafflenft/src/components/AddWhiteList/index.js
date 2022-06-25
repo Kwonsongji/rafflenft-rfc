@@ -14,6 +14,10 @@ import { v4 as uuidv4 } from 'uuid';
 // on a besoins d'un id unique pour pouvoir le sélectioner si on veut le delete/modifier
 const   AddWhiteList = (props) => {
   return (
+    // il nous faut une fonction qui nous permet de rajouter un élem' dans la BDD
+    function createDoc(newDataObj) {
+      // refresh number 
+    }
     <div>
       <button className='btn' onClick={() => {
         createDoc({ address: props.account[0],
