@@ -12,12 +12,71 @@ import { v4 as uuidv4 } from 'uuid';
 //on vas créer le doc à partir de quelle infos ? 
 // à partir de l'address que l'user vas nous renseigner 
 // on a besoins d'un id unique pour pouvoir le sélectioner si on veut le delete/modifier
-const   AddWhiteList = (props) => {
-  return (
+const AddWhiteList = (props) => {
     // il nous faut une fonction qui nous permet de rajouter un élem' dans la BDD
     function createDoc(newDataObj) {
-      // refresh number 
+      // refresh number de pers' dans la liste
+      props.getCount();
+      // testons si l'add' eth est valide 
+      if (newDataObj.address.match(/^0x[a-fA-F0-9]{40}$/)) {
+        // vérifions si la whitelist n'est pas inférieur à 
+        if (props.countData < 5) {
+          // vérifions si l'addr' est déjà dans la BDD
+          let i = 0;
+          // on compte dans la BDD tout les élem' dont l'add' est égale 
+          // à l'addr' transmise au clicquage du bouton 
+          ref.where("address", "==", newDataObj.address)
+            .get()
+            .then(function (querySnapShot) {
+              // pour chaque addr' ident' qu'on essaye de mettre dans whit
+              // on va venir incrémenté la var i, elle devra rester = à 0
+              // sinon il y aura déjà dans notre BDD
+              querySnapShot.forEach(function (doc) {
+                i++;
+              })
+              if (i < 1) {
+                if (props.balance >= 0.6) {
+                  ref.doc(newDataObj.id).set(newDataObj)
+                    .then(result => {
+                      props.setSuccess('You have been added to the whitelist !');
+                      props.setError('');
+                    })
+                    .catch((err) => {
+                      props.setSuccess('');
+                      props.setError('Error, we are sorry .');
+                    })
+                }
+                else {
+                  props.setSuccess('');
+                  props.setError('Not enough founds on your wallet (0.6 minimum)');
+                }
+              }
+              else {
+                props.setSuccess('');
+                props.setError('This addr is already on the whitelist !');
+              }
+            })
+            .catch(function (error) {
+              props.setSuccess('');
+              props.setError('Error, we are sorry.');
+            }); 
+        }
+        else {
+          props.setSuccess('');
+          props.setError('Whitelist max limit exeeded. ');
+        }
+      }
+      else {
+        props.setSuccess('');
+        props.setError('Invalid address');
+      }
+      // mettons à jour le getCount 
+      // ajoutons le setTimeOut car la méth' getCount n'aura pas
+      // le temps de se mettre en place
+      setTimeout(props.getCount, 500)
     }
+  return (
+  
     <div>
       <button className='btn' onClick={() => {
         createDoc({ address: props.account[0],

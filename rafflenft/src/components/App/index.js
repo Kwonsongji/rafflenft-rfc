@@ -38,9 +38,10 @@ function App() {
   const [success, setSuccess] = useState('');
 // si il est déjà inscrit sur la whitelist/ whitelist est complète/ un certain montant en ethereu
   const [error, setError] = useState(''); 
-//pour savoir le nbre de pers' incrit dans la whitelist
+
 
   //cf doc' firebase
+  //pour savoir le nbre de pers' incrit dans la whitelist
   function getCount() {
     // on récupère la BDD et on fait un traitement
     ref.get().then(function (querySnapShot) {
@@ -161,31 +162,28 @@ function App() {
 
   return (
     <div className="app">
-      {error && <p className="alert error" {error}></p>}
-       {success && <p className="alert success" {success}></p>}
+      {error && <p className="alert error">{error}</p>}
+      {success && <p className="alert success">{success}</p>}
+      <InfosAccount
+        accounts={accounts}
+        balance={balance}
+        loader={loader}
+      />
       <AddWhiteList
         countData={countData}
         setcountData={setCountData}
         getCount={getCount}
         balance={balance}
         setBalance={setBalance}
-        getBalance={getBalance}
         setError={setError}
-        setSucess={setSucess}
-
-
-
+        setSuccess={setSuccess}
       />
-      <InfosAccount
-        accounts={accounts}
-        balance={balance}
-        loader={loader}
-      />
-      <button onClick={mint}> MINT ON NFT</button>
+      
+        <button onClick={mint}> MINT ON NFT</button> 
 
     </div>
   );
 }
 
-export {ref}
+export { ref };
 export default App;
