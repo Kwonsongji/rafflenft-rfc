@@ -3,7 +3,7 @@ import InfosAccount from '../InfosAccount';
 import AddWhiteList from '../AddWhiteList';
 /* import logo from './logo.svg'; */
 import { useState, useEffect } from 'react';
-import Firebase from '../Firebase';
+import firebase from '../Firebase';
 // la librairie ethers et le fichier ERC721Merkle.dbg.json sont indispensables pour 
 // communiquer avec le contrat intellingent
 import { ethers, providers } from 'ethers';
@@ -19,7 +19,7 @@ const address = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 /*-----------------COMPONENTS-----------------*/
 
-const ref = Firebase.firestore().collection('NFTwhitelist');
+const ref = firebase.firestore().collection('whitelist');
 
 function App() {
   //nbre de pers' sur la liste
@@ -46,7 +46,7 @@ function App() {
     // on récupère la BDD et on fait un traitement
     ref.get().then(function (querySnapShot) {
       // assigner le nbre de pers' au state countData
-      setCountData(querySnapShot.size)
+      setCountData(querySnapShot.size);
     })
   }
 // pour se co' à notre co' au compte métamask à notre site 
@@ -171,6 +171,7 @@ function App() {
       />
       <AddWhiteList
         countData={countData}
+        accounts={accounts}
         setcountData={setCountData}
         getCount={getCount}
         balance={balance}

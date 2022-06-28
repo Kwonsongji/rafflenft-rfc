@@ -58,12 +58,12 @@ const AddWhiteList = (props) => {
             })
             .catch(function (error) {
               props.setSuccess('');
-              props.setError('Error, we are sorry.');
+              props.setError('Don\'t get the address ');
             }); 
         }
         else {
           props.setSuccess('');
-          props.setError('Whitelist max limit exeeded. ');
+          props.setError('Whitelist max limit exeded. ');
         }
       }
       else {
@@ -79,7 +79,7 @@ const AddWhiteList = (props) => {
   
     <div>
       <button className='btn' onClick={() => {
-        createDoc({ address: props.account[0],
+        createDoc({ address: props.accounts[0],
                     id: uuidv4(), 
                     balance: props.balance
                   })
