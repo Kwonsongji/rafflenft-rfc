@@ -84,3 +84,14 @@ nouv' champs address et cp cv l'address
 ## ADDWHITELIST:
 
 npm i uuid pour générer les 
+create component AddWhiteList
+
+
+## ADMIN
+Pour créer l'interface d'Admin, il nus faudra un router
+npm install react-router-dom
+go main index and fill in
+go firebase, créer authentification, commencer, sign-in method, addresse email et mdp, activer
+go users et add un utilisateur
+
+
