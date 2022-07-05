@@ -78,6 +78,7 @@ const AddWhiteList = (props) => {
   return (
   
     <div>
+      { props.balance >= 0.6 &&
       <button className='btn' onClick={() => {
         createDoc({ address: props.accounts[0],
                     id: uuidv4(), 
@@ -85,7 +86,8 @@ const AddWhiteList = (props) => {
                   })
       }}>
         Go on Whitelist 
-      </button>
+        </button>
+      }
     </div>
   )
 }
