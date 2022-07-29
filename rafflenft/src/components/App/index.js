@@ -1,6 +1,8 @@
 import './style.css';
+//----COMPONENTS-----//
 import InfosAccount from '../InfosAccount';
 import AddWhiteList from '../AddWhiteList';
+import Navbar from '../Navbar';
 /* import logo from './logo.svg'; */
 import { useState, useEffect } from 'react';
 import firebase from '../Firebase';
@@ -8,6 +10,9 @@ import firebase from '../Firebase';
 // communiquer avec le contrat intellingent
 import { ethers, providers } from 'ethers';
 import Contract from '../../artifacts/contracts/ERC721Merkle.sol/ERC721Merkle.json';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+
 
 // on va devoir créer une preuve de Merkle
 const { MerkleTree } = require('merkletreejs');
