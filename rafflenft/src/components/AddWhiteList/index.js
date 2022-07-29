@@ -88,8 +88,9 @@ const AddWhiteList = (props) => {
         Go on Whitelist 
         </button>
       }
+     
     </div>
   )
 }
 
-export default  AddWhiteList
+export default AddWhiteList;

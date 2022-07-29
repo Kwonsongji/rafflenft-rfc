@@ -10,8 +10,11 @@ const Admin = () => {
   const [password, setPassword] = useState('');
   const [logged, setLogged] = useState(false);
   const [data, setData] = useState([]);
+  const [address, setAddress] = useState('');
 // on va mettre ce state pour savoir si on a bien recupérer les données
   const [loaded, setLoaded] = useState(false);
+  const [succes, setSucces] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     setLoaded(true);
@@ -43,7 +46,7 @@ const Admin = () => {
       const items = [];
       // 2)
       querySnapshot.forEach((doc) => {
-        items.push(doc.data()) // 3)
+        items.push(doc.data()); // 3)
       })
       setData(items); // 4)
 
@@ -54,6 +57,25 @@ const Admin = () => {
     ref.doc(e.target.value).delete()
 
   } 
+  function addOnwhiteList() {
+    let balance = 0;
+    let id = uuidv4();
+    let obj = {
+      address: address,
+      id: id,
+      balance: balance
+    }
+    // on rajoute ces données dans la BDD
+    ref.doc(obj.id).set(obj)
+      .then(result => {
+        setSucces('User added on the whitelist');
+        setError('');
+      })
+      .catch((err) => {
+        setError('err');
+        setSucces('');
+      })
+  }
 
   return (
     <div>
@@ -64,17 +86,23 @@ const Admin = () => {
           <input className="signIn__email" type="email" onChange={e => setEmail(e.target.value)} placeholder="enter an email"/>
           <input className="signIn__password" type="password" onChange={e => setPassword(e.target.value)} placeholder="enter an password"/>
           <button onClick={loggin}>Connexion</button>
+
+
         </div>
         :
         <div>
-          Listing of accounts of WhiteList
-          {loaded &&
-            data.map(element => {
-              return <li key={element.id} >{element.address} - {element.balance}
-              - <button value={element.id}  onClick={deleteAddress} > Delete </button>
-              </li>
-            } )
-          }
+            {error && <p className="alert error">{error}</p>}
+            {succes && <p className="alert succes">{succes}</p>}
+            Listing of accounts of WhiteList
+            {loaded &&
+              data.map(element => {
+                return <li key={element.id} >{element.address} - {element.balance}
+                - <button value={element.id}  onClick={deleteAddress} > Delete </button></li>
+              } )
+            }
+          Add an address on the whitelist 
+          <input type="text" onChange={e => setAddress(e.target.value)} />
+          <button onClick={addOnwhiteList}> Add on whitelist</button>
         </div>
     
     }
@@ -83,4 +111,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default Admin;
